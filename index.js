@@ -49,16 +49,13 @@ client.connect(err => {
 	})	
 
 	app.post('/addReview', (req, res) => {
-	const name = req.body.name;
-	const designation = req.body.designation;
-	const description = req.body.description;
-
-	reviewCollection.insertOne({ name, designation, description })
+		const newReview = req.body;
+		
+		reviewCollection.insertOne(newReview)
 		.then(result => {
 			res.send(result.insertedCount > 0);
 		})
-    })
-	
+	})
 	
 	app.get('/reviews', (req, res) => {
 	reviewCollection.find({})
