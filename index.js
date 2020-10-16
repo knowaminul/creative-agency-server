@@ -46,7 +46,18 @@ client.connect(err => {
 		.toArray((err, documents) => {
 			res.send(documents);
 		})
-	})	
+	})
+
+	app.patch('/updateStatus/:id', (req, res) => {
+		orderCollection.updateOne({ _id: ObjectId(req.params.id) },
+		  {
+			$set: { status: req.body.status }
+		  })
+		  .then(result => {
+			console.log(result)
+			res.send(result.modifiedCount > 0)
+		  })
+	});	
 
 	app.post('/addReview', (req, res) => {
 		const newReview = req.body;
