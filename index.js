@@ -48,16 +48,18 @@ client.connect(err => {
 		})
 	})
 
-	app.patch('/updateStatus/:id', (req, res) => {
-		orderCollection.updateOne({ _id: ObjectId(req.params.id) },
-		  {
-			$set: { status: req.body.status }
-		  })
-		  .then(result => {
-			console.log(result)
-			res.send(result.modifiedCount > 0)
-		  })
-	});	
+    app.post('/updateStatus', (req, res) => {
+        const updatedStatus = req.body;
+        const id = req.body.id;
+        const status = req.body.status;
+        orderCollection.updateOne(
+            { _id: ObjectID(id) },
+            { $set: { status: `${status}` } },
+            { upsert: true })
+            .then(result => {
+                res.send(result.insertedCount > 0);
+            })
+    })
 
 	app.post('/addReview', (req, res) => {
 		const newReview = req.body;
